@@ -20,12 +20,10 @@ eyesCascade = cv2.CascadeClassifier(eyesPath)
 
 # Read the image
 while True:
-    #image = cv2.imread(imagePath)
     ret, frame = video_capture.read()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     glasses = gl
-    #glasses = cv2.resize(glasses,None,fx=0.3, fy=0.3, interpolation = cv2.INTER_CUBIC)
 
     # Detect faces in the image
     faces = faceCascade.detectMultiScale(
@@ -33,7 +31,6 @@ while True:
         scaleFactor=1.1,
         minNeighbors=5,
         minSize=(30, 30)
-        #flags = cv2.CV_HAAR_SCALE_IMAGE
     )
 
     for (x, y, w, h) in faces:
@@ -42,19 +39,15 @@ while True:
         roi_gray = gray[y:y+h, x:x+w]
         roi_color = frame[y:y+h, x:x+w]
         eyes = eyesCascade.detectMultiScale(roi_gray)
-        xscale = w/glasses.shape[1]
-        yscale = h/glasses.shape[0]
-        print(glasses.shape[0] + (int)(glasses.shape[0]))
-        #sglasses = cv2.resize(glasses, None, fx=xscale, fy=yscale, interpolation=cv2.INTER_CUBIC)
         sglasses = cv2.resize(glasses, (w, w/3))
-        leftEye = 641
+        leftEye = 1280
         g = 1000
         for (ex, ey, ew, eh) in eyes:
             cv2.rectangle(roi_color, (ex,ey), (ex+ew,ey+eh), (0, 255, 0), 2)
             if ex < leftEye:
                 leftEye = ex
                 g = ey
-        if leftEye < 640:
+        if leftEye < 1280:
             y1, y2 = g, g + sglasses.shape[0]
             x1, x2 = x, x + sglasses.shape[1]
             alpha_s = sglasses[:,:,3] / 255.0
