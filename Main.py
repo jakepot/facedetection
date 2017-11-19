@@ -32,6 +32,7 @@ oldGlassesLiveTime = 0
 while True:
     if programMode == 1:
         ret, frame = video_capture.read()
+        frame = cv2.flip(frame, 1)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         glasses = gl
@@ -39,7 +40,7 @@ while True:
         # Detect faces in the image
         faces = faceCascade.detectMultiScale(
             gray,
-            scaleFactor=1.05,
+            scaleFactor=1.08,
             minNeighbors=4,
             minSize=(30, 30)
         )
@@ -88,13 +89,14 @@ while True:
         cv2.imshow("Faces", frame)
 
 
-    if cv2.waitKey(5) & 0xFF == ord('s'):
+    key = cv2.waitKey(10)
+    if key == 115: # s
         showRectangles = 1 - showRectangles
-    if cv2.waitKey(5) & 0xFF == ord('q'):
+    elif key == 27: # ESC
         break
-    if cv2.waitKey(5) & 0xFF == ord('1'):
+    elif key == 49: # 1
         programMode = 1
-    if cv2.waitKey(5) & 0xFF == ord('2'):
+    elif key == 50: # 2
         programMode = 2
 
 video_capture.release()
