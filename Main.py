@@ -1,13 +1,12 @@
-import numpy as np
-import cv2
-import sys
 import datetime
 
-# Get user supplied values
+import cv2
+import numpy as np
+
 video_capture = cv2.VideoCapture(0)
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
-filename = str(datetime.datetime.now()).replace(" ", "_").replace(":", "_")[:-7] + ".avi"
-out = cv2.VideoWriter(filename, fourcc, 25.0, (640, 480))
+# filename = str(datetime.datetime.now()).replace(" ", "_").replace(":", "_")[:-7] + ".avi"
+# out = cv2.VideoWriter(filename, fourcc, 25.0, (640, 480))
 
 recording = False
 movement_detected = False
@@ -16,13 +15,6 @@ last_movement = datetime.datetime.now()
 
 # tryb pracy - ktory algorytm ma byc uzywany
 programMode = 2
-
-# parametry redukcji drzenia okularow
-noiseReactionDelay = 10
-noiseTolerantion = 10
-oldGlassesPosX = 0
-oldGlassesPosY = 0
-oldGlassesLiveTime = 0
 
 # parametry wykrywania poprzez ruch
 possibleColorDiff = 10
@@ -69,7 +61,7 @@ while True:
 
         cv2.rectangle(frame, (boundaryX, boundaryY), (boundaryX + boundaryW, boundaryY + boundaryH), (0, 255, 0), 2)
         # saving video
-        if movement_detected:
+        if movement_detected:  # ustal warunek
             last_movement = datetime.datetime.now()
             if not recording:
                 filename = str(datetime.datetime.now()).replace(" ", "_").replace(":", "_")[:-7] + ".avi"
@@ -84,7 +76,6 @@ while True:
                     recording = False
                     out.release()
 
-        # out.write(frame)
         cv2.imshow("Faces", frame)
         oldGray = gray
 
